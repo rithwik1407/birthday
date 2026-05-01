@@ -1,0 +1,112 @@
+CLOUDINARY VIDEO UPLOAD - COMPLETE GUIDE
+=========================================
+
+WHAT CHANGED:
+=============
+✅ Cloudinary upload now works properly
+✅ Videos are saved to MongoDB with Cloudinary URLs
+✅ All features work: blur thumbnail, guessing game, progress tracking
+✅ Sample MongoDB videos removed (only Cloudinary videos show)
+✅ MongoDB still connected for storing video metadata
+
+HOW TO UPLOAD VIDEOS:
+====================
+
+STEP 1: Go to Admin Panel
+- URL: http://localhost:3000/admin
+- Click "🎥 Videos" tab
+
+STEP 2: Upload Video
+- Click "📤 Upload Video from Cloudinary"
+- A Cloudinary upload dialog will open
+- Select your video file (MP4, WebM, OGG)
+- Wait for upload to complete
+- Click "Done" button
+
+STEP 3: Verify Upload
+- You should see: "✅ Video uploaded successfully!"
+- Video URL and thumbnail will auto-fill
+- If you see error, check:
+  - Upload preset name is "sweety_birthday"
+  - Preset is set to "Unsigned"
+  - Preset resource type is "Video"
+
+STEP 4: Fill in Video Details
+- **Video Title**: Name of the video (e.g., "Sarah's Message")
+- **Recorded By**: Person's name (e.g., "Sarah") - THIS IS WHAT USER MUST GUESS
+- **Hint**: Clue for guessing (e.g., "💭 The one who always supports you")
+- Leave thumbnail URL as-is (auto-filled from Cloudinary)
+
+STEP 5: Submit Video
+- Click "Add Video" button
+- Enter admin token when prompted: chotey
+- Video saves to MongoDB with Cloudinary URL
+
+STEP 6: Test Video
+- Go to http://localhost:3000/videos
+- You should see your video card (locked with blur)
+- Click to guess the person's name
+- If correct, video unlocks and plays
+- All features work: blur, guessing, progress bar, confetti
+
+TROUBLESHOOTING:
+================
+
+Upload Dialog Shows "Upload preset not found":
+- Go to Cloudinary dashboard
+- Settings → Upload → Upload presets
+- Make sure preset name is exactly: sweety_birthday
+- Make sure "Unsigned" is ON
+- Make sure "Resource type" is "Video"
+- Restart dev server: npm run dev
+
+Video URL Not Filling After Upload:
+- Check browser console for errors
+- Make sure upload completed (click "Done")
+- Try uploading again
+- Check Cloudinary dashboard to see if video was uploaded
+
+Video Not Playing:
+- Check video URL is correct (should start with https://res.cloudinary.com)
+- Check video format is supported (MP4 recommended)
+- Try a different video file
+
+Video Not Showing in /videos:
+- Make sure you clicked "Add Video" and entered admin token
+- Check MongoDB to see if video was saved
+- Refresh the page
+
+FEATURES THAT WORK:
+===================
+✅ Blur thumbnail when locked
+✅ Guessing game with hints
+✅ Correct guess unlocks video
+✅ Video plays with controls
+✅ Progress bar updates
+✅ Confetti celebration
+✅ MongoDB persistence
+✅ Admin token protection
+✅ Responsive design
+
+CLOUDINARY DASHBOARD:
+====================
+- View all uploaded videos: https://dashboard.cloudinary.com
+- Media Library → Videos
+- See video URLs, thumbnails, and metadata
+- Delete videos if needed
+
+NEXT STEPS:
+===========
+1. Make sure upload preset is set up correctly
+2. Upload a test video from admin panel
+3. Verify it appears in /videos
+4. Test the guessing game
+5. Celebrate! 🎉
+
+NOTES:
+======
+- Videos are stored in Cloudinary (not on your server)
+- Metadata is stored in MongoDB
+- Cloudinary provides CDN delivery (fast worldwide)
+- Free tier: 25GB storage, 25GB bandwidth/month
+- Videos auto-optimize for web playback

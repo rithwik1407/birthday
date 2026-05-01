@@ -1,0 +1,91 @@
+HOW TO ADD VIDEOS - COMPLETE GUIDE
+===================================
+
+STEP 1: PREPARE YOUR VIDEO
+- Record or prepare your video file
+- Supported formats: MP4, WebM, OGG
+- Recommended: MP4 format for best compatibility
+
+STEP 2: UPLOAD VIDEO TO A HOSTING SERVICE
+
+OPTION A: GOOGLE DRIVE (EASIEST - FREE)
+1. Go to drive.google.com
+2. Click "New" → "File upload"
+3. Select your video file
+4. Right-click the uploaded file → "Share"
+5. Change to "Anyone with the link"
+6. Copy the file ID from the URL
+   Example URL: https://drive.google.com/file/d/1ABC123XYZ/view
+   File ID: 1ABC123XYZ
+7. Use this format for video URL:
+   https://drive.google.com/uc?export=download&id=1ABC123XYZ
+
+OPTION B: CLOUDINARY (RECOMMENDED - FREE TIER)
+1. Sign up at cloudinary.com
+2. Go to Dashboard → Media Library
+3. Click "Upload" → Select your video
+4. Wait for upload to complete
+5. Click on the video → Copy the URL
+6. Use the copied URL directly
+
+OPTION C: YOUTUBE (FREE)
+1. Upload video to YouTube (private or unlisted)
+2. Right-click video → "Copy video URL"
+3. Use the YouTube URL directly
+
+OPTION D: YOUR OWN SERVER
+1. Upload video to your web server
+2. Get the direct link to the video file
+3. Use the direct link
+
+STEP 3: ADD VIDEO IN ADMIN PANEL
+1. Go to http://localhost:3000/admin (or your deployed URL + /admin)
+2. Click "🎥 Videos" tab
+3. Fill in the form:
+   - Video Title: "Sarah's Birthday Message"
+   - Video URL: Paste the URL from Step 2
+   - Thumbnail URL (optional): Image URL for preview
+   - Recorded By: "Sarah" (THIS IS WHAT USER MUST GUESS)
+   - Hint: "💭 The one who always supports you"
+4. When prompted, enter admin token from .env file
+5. Click "Add Video"
+
+STEP 4: TEST THE VIDEO
+1. Go to http://localhost:3000/videos
+2. Click on the locked video card
+3. Enter the name from "Recorded By" field
+4. Video should unlock and play
+
+TROUBLESHOOTING
+===============
+
+Video Not Playing:
+- Check that the URL is accessible (paste in browser)
+- Make sure video format is supported (MP4 recommended)
+- Check browser console for CORS errors
+- Try a different hosting service
+
+Video URL Not Working:
+- Google Drive: Make sure file is shared publicly
+- YouTube: Use the full video URL
+- Cloudinary: Copy the direct video URL, not the page URL
+
+Admin Token Error:
+- Check .env file for ADMIN_TOKEN value
+- Make sure you're entering the exact token
+- Default: "your-secret-admin-token-here"
+
+RECOMMENDED VIDEO SOURCES
+==========================
+✅ Google Drive - Easy, free, reliable
+✅ Cloudinary - Professional, good for production
+✅ YouTube - Easy but may have playback restrictions
+✅ Your own server - Full control
+
+SAMPLE VIDEO URLS (FOR TESTING)
+================================
+https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4
+https://commondatastorage.googleapis.com/gtv-videos-library/sample/ElephantsDream.mp4
+https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4
+
+These are public test videos you can use to verify the system works.

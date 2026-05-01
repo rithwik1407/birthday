@@ -1,0 +1,127 @@
+CLOUDINARY VIDEO UPLOAD SETUP - COMPLETE GUIDE
+===============================================
+
+STEP 1: CREATE CLOUDINARY ACCOUNT
+==================================
+1. Go to https://cloudinary.com
+2. Click "Sign Up Free"
+3. Fill in your details:
+   - Email
+   - Password
+   - Name
+4. Click "Create Account"
+5. Verify your email
+6. Login to your Cloudinary dashboard
+
+STEP 2: GET YOUR CLOUDINARY CREDENTIALS
+========================================
+1. Go to https://dashboard.cloudinary.com
+2. Look at the top of the page - you'll see your "Cloud Name"
+3. Copy your Cloud Name (looks like: abc123xyz)
+4. Go to Settings → API Keys
+5. You'll see:
+   - Cloud Name (already have this)
+   - API Key
+   - API Secret
+6. Copy these values
+
+STEP 3: UPDATE YOUR .env FILE
+==============================
+Open your .env file and add/update these lines:
+
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name_here
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_upload_preset_here
+CLOUDINARY_API_KEY=your_api_key_here
+CLOUDINARY_API_SECRET=your_api_secret_here
+
+Example:
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=dxyz1234
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=sweety_birthday
+CLOUDINARY_API_KEY=123456789abcdef
+CLOUDINARY_API_SECRET=xyz789abc123def
+
+STEP 4: CREATE UPLOAD PRESET
+=============================
+1. Go to https://dashboard.cloudinary.com
+2. Click "Settings" (gear icon)
+3. Go to "Upload" tab
+4. Scroll down to "Upload presets"
+5. Click "Add upload preset"
+6. Fill in:
+   - Name: sweety_birthday (or any name you want)
+   - Unsigned: Toggle ON (important!)
+   - Resource type: Video
+   - Folder: birthday_videos (optional)
+7. Click "Save"
+8. Copy the preset name
+
+STEP 5: UPDATE .env WITH UPLOAD PRESET
+=======================================
+Update your .env file with the preset name you created:
+
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=sweety_birthday
+
+STEP 6: INSTALL CLOUDINARY PACKAGE
+===================================
+Run this command in your terminal:
+
+npm install next-cloudinary
+
+STEP 7: VERIFY SETUP
+====================
+After you complete all steps above, send me:
+1. Your .env file (with values filled in)
+2. Confirmation that you've installed next-cloudinary
+
+Then I will:
+1. Create the video upload component
+2. Update the admin panel to use Cloudinary
+3. Add the backend API for video uploads
+4. Test everything without errors
+
+WHAT YOU'LL GET:
+================
+✅ Drag-and-drop video upload in admin panel
+✅ Automatic video processing by Cloudinary
+✅ Direct video URLs for playback
+✅ Thumbnail generation
+✅ Progress bar during upload
+✅ Error handling
+✅ MongoDB integration
+
+CLOUDINARY FEATURES (FREE TIER):
+================================
+- 25 GB storage
+- 25 GB bandwidth/month
+- Unlimited transformations
+- Video processing
+- Automatic thumbnails
+- CDN delivery
+
+IMPORTANT NOTES:
+================
+1. Keep CLOUDINARY_API_SECRET private (never share)
+2. NEXT_PUBLIC_* variables are visible in browser (that's OK)
+3. Upload preset must be set to "Unsigned" for client-side uploads
+4. Videos are automatically optimized by Cloudinary
+5. You can manage all videos in Cloudinary dashboard
+
+TROUBLESHOOTING:
+================
+If upload fails:
+- Check Cloud Name is correct
+- Check Upload Preset exists and is "Unsigned"
+- Check .env file is saved
+- Restart the dev server: npm run dev
+
+If video doesn't play:
+- Check video format is supported (MP4, WebM, OGG)
+- Check video file size (Cloudinary has limits)
+- Check video URL in Cloudinary dashboard
+
+NEXT STEPS:
+===========
+1. Complete steps 1-6 above
+2. Send me your .env file (with values)
+3. I'll create the upload component
+4. Test and deploy!

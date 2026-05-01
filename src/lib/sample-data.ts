@@ -1,0 +1,50 @@
+export const sampleWishes = [
+  {
+    _id: "1",
+    senderName: "Best Friend",
+    message: "You deserve all the happiness in the world. Happy birthday to the most amazing person I know!",
+    senderPhoto: "",
+    hint: "💭 The one who always supports you",
+    revealPhoto: "https://via.placeholder.com/600?text=Friend+Photo",
+    revealMessage: "This is a special moment we shared together. You mean the world to me! 💕",
+    category: "friend",
+    createdAt: new Date("2026-04-20"),
+  },
+  {
+    _id: "2",
+    senderName: "Mom",
+    message: "Thank you for being the strongest woman I know. Wishing you a day as beautiful as you are.",
+    senderPhoto: "",
+    hint: "👩 The one who raised you",
+    revealPhoto: "https://via.placeholder.com/600?text=Mom+Photo",
+    revealMessage: "You are my inspiration and my pride. Happy birthday, my beautiful daughter! 💖",
+    category: "family",
+    createdAt: new Date("2026-04-21"),
+  },
+  {
+    _id: "3",
+    senderName: "Sister",
+    message: "Growing up with you has been the greatest gift. Happy birthday to my favorite person!",
+    senderPhoto: "",
+    hint: "👯 Your sibling",
+    revealPhoto: "https://via.placeholder.com/600?text=Sister+Photo",
+    revealMessage: "We've shared so many memories. Here's to many more! Love you always! 💜",
+    category: "family",
+    createdAt: new Date("2026-04-22"),
+  },
+  {
+    _id: "4",
+    senderName: "Him",
+    message: "Every moment with you feels like a dream. Thank you for making my life so beautiful. Happy birthday, my love.",
+    senderPhoto: "",
+    hint: "💕 Your special someone",
+    revealPhoto: "https://via.placeholder.com/600?text=Love+Photo",
+    revealMessage: "You are my forever. This is just the beginning of our beautiful story together! 💑",
+    category: "you",
+    createdAt: new Date("2026-04-23"),
+    isSpecial: true,
+  },
+];
+
+// Empty array - videos will come from Cloudinary uploads only
+export const sampleVideos: never[] = [];
