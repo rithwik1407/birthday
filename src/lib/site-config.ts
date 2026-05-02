@@ -6,7 +6,7 @@ export const siteConfig = {
   revealMessage: "Hey Sweety... its finally your day <3",
   revealSubmessage: "Tonight is the beginning of your surprises.",
   hint: "Your first surprise is waiting outside...",
-  backgroundImage: "", // Set this to your image URL
+  backgroundImage: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1920&q=80", // Beautiful romantic background
   backgroundBlur: 8, // Blur amount in pixels
   music: {
     title: "Our Song",
