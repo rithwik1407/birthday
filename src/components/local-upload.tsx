@@ -72,67 +72,41 @@ export function LocalUpload({
 
   const uploadDirect = async (file: File) => {
     try {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        try {
-          const base64String = event.target?.result as string;
-          const formData = new FormData();
-          formData.append("file", base64String);
-          formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "");
-          formData.append("resource_type", acceptType.includes("video") ? "video" : "image");
+      const formData = new FormData();
+      formData.append("file", file); // Use binary data, not base64
+      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "");
+      formData.append("resource_type", acceptType.includes("video") ? "video" : "image");
 
-          const endpoint = acceptType.includes("video") ? "video/upload" : "image/upload";
-          const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${endpoint}`,
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
-
-          if (response.ok) {
-            const data = await response.json();
-            const fileUrl = data.secure_url;
-            const thumbnail = data.thumbnail_url || data.secure_url;
-
-            setUploadProgress(100);
-            setUploadStatus({
-              type: "success",
-              message: "✅ File uploaded successfully!",
-            });
-
-            onUploadSuccess(fileUrl, thumbnail);
-
-            setTimeout(() => {
-              setUploadStatus({ type: null, message: "" });
-              setIsUploading(false);
-            }, 3000);
-          } else {
-            const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Upload failed");
-          }
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : "Upload failed";
-          setUploadStatus({
-            type: "error",
-            message: `❌ ${errorMessage}`,
-          });
-          onUploadError?.(errorMessage);
-          setIsUploading(false);
+      const endpoint = acceptType.includes("video") ? "video/upload" : "image/upload";
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${endpoint}`,
+        {
+          method: "POST",
+          body: formData,
         }
-      };
+      );
 
-      reader.onerror = () => {
-        const errorMessage = "Failed to read file";
+      if (response.ok) {
+        const data = await response.json();
+        const fileUrl = data.secure_url;
+        const thumbnail = data.thumbnail_url || data.secure_url;
+
+        setUploadProgress(100);
         setUploadStatus({
-          type: "error",
-          message: `❌ ${errorMessage}`,
+          type: "success",
+          message: "✅ File uploaded successfully!",
         });
-        onUploadError?.(errorMessage);
-        setIsUploading(false);
-      };
 
-      reader.readAsDataURL(file);
+        onUploadSuccess(fileUrl, thumbnail);
+
+        setTimeout(() => {
+          setUploadStatus({ type: null, message: "" });
+          setIsUploading(false);
+        }, 3000);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Upload failed");
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Upload failed";
       setUploadStatus({
@@ -154,67 +128,52 @@ export function LocalUpload({
         const end = Math.min(start + CHUNK_SIZE, file.size);
         const chunk = file.slice(start, end);
 
-        const reader = new FileReader();
+        try {
+          const formData = new FormData();
+          formData.append("file", chunk); // Use binary data, not base64
+          formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "");
+          formData.append("resource_type", acceptType.includes("video") ? "video" : "image");
+          formData.append("chunk", `${i + 1}/${totalChunks}`);
 
-        await new Promise<void>((resolve, reject) => {
-          reader.onload = async (event) => {
-            try {
-              const base64String = event.target?.result as string;
-              const formData = new FormData();
-              formData.append("file", base64String);
-              formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "");
-              formData.append("resource_type", acceptType.includes("video") ? "video" : "image");
-              formData.append("chunk", `${i + 1}/${totalChunks}`);
-
-              const endpoint = acceptType.includes("video") ? "video/upload" : "image/upload";
-              const response = await fetch(
-                `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${endpoint}`,
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              );
-
-              if (response.ok) {
-                uploadedSize += chunk.size;
-                const progress = Math.round((uploadedSize / file.size) * 100);
-                setUploadProgress(progress);
-
-                // If this is the last chunk, get the final result
-                if (i === totalChunks - 1) {
-                  const data = await response.json();
-                  const fileUrl = data.secure_url;
-                  const thumbnail = data.thumbnail_url || data.secure_url;
-
-                  setUploadStatus({
-                    type: "success",
-                    message: "✅ File uploaded successfully!",
-                  });
-
-                  onUploadSuccess(fileUrl, thumbnail);
-
-                  setTimeout(() => {
-                    setUploadStatus({ type: null, message: "" });
-                    setIsUploading(false);
-                  }, 3000);
-                }
-
-                resolve();
-              } else {
-                const errorData = await response.json();
-                reject(new Error(errorData.error?.message || "Chunk upload failed"));
-              }
-            } catch (error) {
-              reject(error);
+          const endpoint = acceptType.includes("video") ? "video/upload" : "image/upload";
+          const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${endpoint}`,
+            {
+              method: "POST",
+              body: formData,
             }
-          };
+          );
 
-          reader.onerror = () => {
-            reject(new Error("Failed to read chunk"));
-          };
+          if (response.ok) {
+            uploadedSize += chunk.size;
+            const progress = Math.round((uploadedSize / file.size) * 100);
+            setUploadProgress(progress);
 
-          reader.readAsDataURL(chunk);
-        });
+            // If this is the last chunk, get the final result
+            if (i === totalChunks - 1) {
+              const data = await response.json();
+              const fileUrl = data.secure_url;
+              const thumbnail = data.thumbnail_url || data.secure_url;
+
+              setUploadStatus({
+                type: "success",
+                message: "✅ File uploaded successfully!",
+              });
+
+              onUploadSuccess(fileUrl, thumbnail);
+
+              setTimeout(() => {
+                setUploadStatus({ type: null, message: "" });
+                setIsUploading(false);
+              }, 3000);
+            }
+          } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error?.message || "Chunk upload failed");
+          }
+        } catch (error) {
+          throw error;
+        }
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Upload failed";
