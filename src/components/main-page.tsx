@@ -190,15 +190,7 @@ export default function MainPage() {
             {siteConfig.eventTitle}
           </motion.h1>
 
-          {/* Subtitle */}
-          <motion.p
-            className="text-2xl md:text-3xl text-text-secondary font-light"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            For {siteConfig.herName}
-          </motion.p>
+          {/* Subtitle - Removed */}
 
           {/* Countdown Grid */}
           <motion.div
