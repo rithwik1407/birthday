@@ -20,7 +20,14 @@ export async function PATCH(
           _id: id,
           isOpened: isOpened,
         },
-        { status: 200 }
+        { 
+          status: 200,
+          headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+          },
+        }
       );
     }
 
@@ -37,7 +44,14 @@ export async function PATCH(
       );
     }
 
-    return NextResponse.json(wish, { status: 200 });
+    return NextResponse.json(wish, { 
+      status: 200,
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   } catch (error) {
     console.error("Error updating wish:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";

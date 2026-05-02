@@ -9,14 +9,32 @@ export async function GET() {
 
     if (!db) {
       // Return sample data if no DB connection
-      return NextResponse.json(sampleWishes);
+      return NextResponse.json(sampleWishes, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      });
     }
 
     const wishes = await Wish.find().sort({ createdAt: -1 });
-    return NextResponse.json(wishes);
+    return NextResponse.json(wishes, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   } catch (error) {
     console.error("Error fetching wishes:", error);
-    return NextResponse.json(sampleWishes);
+    return NextResponse.json(sampleWishes, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   }
 }
 

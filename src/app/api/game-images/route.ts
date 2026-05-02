@@ -22,7 +22,13 @@ export async function GET() {
 
     if (!db) {
       // Return default images if no DB
-      return NextResponse.json(DEFAULT_IMAGES);
+      return NextResponse.json(DEFAULT_IMAGES, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      });
     }
 
     const images = await GameImage.find({ isActive: true })
@@ -30,13 +36,31 @@ export async function GET() {
       .limit(8);
 
     if (images.length === 0) {
-      return NextResponse.json(DEFAULT_IMAGES);
+      return NextResponse.json(DEFAULT_IMAGES, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      });
     }
 
-    return NextResponse.json(images.map((img) => img.imageUrl));
+    return NextResponse.json(images.map((img) => img.imageUrl), {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   } catch (error) {
     console.error("Error fetching game images:", error);
-    return NextResponse.json(DEFAULT_IMAGES);
+    return NextResponse.json(DEFAULT_IMAGES, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   }
 }
 

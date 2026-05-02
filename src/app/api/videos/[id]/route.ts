@@ -11,7 +11,7 @@ export async function PATCH(
     const body = await request.json();
     const { guessedBy } = body;
 
-    if (!guessedBy) {
+    if (!guessedBy && guessedBy !== null) {
       return NextResponse.json(
         { error: "guessedBy is required" },
         { status: 400 }
@@ -28,7 +28,14 @@ export async function PATCH(
           guessedBy,
           updatedAt: new Date(),
         },
-        { status: 200 }
+        { 
+          status: 200,
+          headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+          },
+        }
       );
     }
 
@@ -45,7 +52,14 @@ export async function PATCH(
       );
     }
 
-    return NextResponse.json(video, { status: 200 });
+    return NextResponse.json(video, { 
+      status: 200,
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   } catch (error) {
     console.error("Error updating video:", error);
     return NextResponse.json(

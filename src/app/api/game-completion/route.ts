@@ -15,6 +15,12 @@ export async function GET() {
         message: "You completed the memory match game! 🎉",
         videoUrl: "",
         thumbnail: "",
+      }, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
       });
     }
 
@@ -26,10 +32,22 @@ export async function GET() {
         message: "You completed the memory match game! 🎉",
         videoUrl: "",
         thumbnail: "",
+      }, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
       });
     }
 
-    return NextResponse.json(completion);
+    return NextResponse.json(completion, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   } catch (error) {
     console.error("Error fetching game completion:", error);
     return NextResponse.json({
@@ -37,6 +55,12 @@ export async function GET() {
       message: "You completed the memory match game! 🎉",
       videoUrl: "",
       thumbnail: "",
+    }, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
     });
   }
 }

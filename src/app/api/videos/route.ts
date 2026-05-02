@@ -11,14 +11,32 @@ export async function GET() {
 
     if (!db) {
       // Return sample data if no DB connection
-      return NextResponse.json(sampleVideos);
+      return NextResponse.json(sampleVideos, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      });
     }
 
     const videos = await Video.find().sort({ createdAt: -1 });
-    return NextResponse.json(videos);
+    return NextResponse.json(videos, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   } catch (error) {
     console.error("Error fetching videos:", error);
-    return NextResponse.json(sampleVideos);
+    return NextResponse.json(sampleVideos, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      },
+    });
   }
 }
 
