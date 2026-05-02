@@ -1,6 +1,6 @@
 export const siteConfig = {
   herName: "Sweety",
-  eventTitle: "Sweety Birthday Surprise",
+  eventTitle: "Sweety",
   birthdayDate: "2026-05-03T00:00:00",
   passcode: "chotey",
   revealMessage: "Hey Sweety... its finally your day <3",
