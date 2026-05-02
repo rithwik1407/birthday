@@ -152,6 +152,35 @@ export function VideoWallSection() {
     }
   };
 
+  const handleRefreshVideos = async () => {
+    if (!window.confirm("Reset all videos to locked state? You'll need to guess again.")) {
+      return;
+    }
+
+    try {
+      // Reset all videos by clearing guessedBy field
+      for (const video of videos) {
+        if (guesses[video._id]) {
+          await fetch(`/api/videos/${video._id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ guessedBy: null }),
+          });
+        }
+      }
+
+      // Clear local state
+      setWatchedVideos(new Set());
+      setGuesses({});
+      setGuessResult(null);
+      setShowGuessInput(null);
+      setGuessInput("");
+    } catch (error) {
+      console.error("Error refreshing videos:", error);
+      alert("Error refreshing videos. Try again!");
+    }
+  };
+
   return (
     <div className="space-y-8">
       <motion.div
@@ -177,7 +206,20 @@ export function VideoWallSection() {
           <p className="text-ink-2 font-medium">
             {watchedVideos.size} / {videos.length} memories unlocked 💖
           </p>
-          <p className="text-rose-1 font-bold text-lg">{progress}%</p>
+          <div className="flex gap-2 items-center">
+            <p className="text-rose-1 font-bold text-lg">{progress}%</p>
+            {watchedVideos.size > 0 && (
+              <motion.button
+                onClick={handleRefreshVideos}
+                className="px-3 py-1 rounded-full text-sm font-medium glass-strong hover:glass-strong transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Reset all videos to locked state"
+              >
+                🔄 Refresh
+              </motion.button>
+            )}
+          </div>
         </div>
 
         <motion.div
@@ -442,7 +484,7 @@ export function VideoWallSection() {
           </DialogHeader>
 
           <motion.div
-            className="w-full bg-black rounded-lg overflow-hidden flex items-center justify-center"
+            className="w-full bg-black rounded-lg overflow-hidden flex items-center justify-center relative"
             style={{ aspectRatio: "16/9" }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -459,17 +501,38 @@ export function VideoWallSection() {
                 />
               ) : (
                 // Cloudinary or other video - use video tag
-                <video
-                  key={selectedVideo._id}
-                  src={selectedVideo.url}
-                  controls
-                  autoPlay
-                  controlsList="nodownload"
-                  crossOrigin="anonymous"
-                  preload="metadata"
-                  playsInline
-                  className="w-full h-full"
-                />
+                <>
+                  <video
+                    key={selectedVideo._id}
+                    src={selectedVideo.url}
+                    controls
+                    autoPlay
+                    controlsList="nodownload"
+                    crossOrigin="anonymous"
+                    preload="metadata"
+                    playsInline
+                    className="w-full h-full"
+                    onLoadStart={() => {
+                      // Show loading indicator
+                    }}
+                    onCanPlay={() => {
+                      // Hide loading indicator
+                    }}
+                  />
+                  {/* Loading Indicator */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center bg-black/50 pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ delay: 2 }}
+                  >
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-12 h-12 border-4 border-rose-1/30 border-t-rose-1 rounded-full"
+                    />
+                  </motion.div>
+                </>
               )
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-1 to-rose-2">
