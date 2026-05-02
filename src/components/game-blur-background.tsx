@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 export function GameBlurBackground() {
@@ -8,9 +8,15 @@ export function GameBlurBackground() {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const particlesRef = useRef<THREE.Points | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    // Detect mobile
+    const mobile = window.innerWidth < 768;
+    setIsMobile(mobile);
+
+    // Skip THREE.js rendering on mobile for better performance
+    if (mobile || !containerRef.current) return;
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -28,11 +34,11 @@ export function GameBlurBackground() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     rendererRef.current = renderer;
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap pixel ratio for mobile
     containerRef.current.appendChild(renderer.domElement);
 
-    // Create particles with blur effect
-    const particleCount = 150;
+    // Create particles with blur effect - Reduced count on desktop for better performance
+    const particleCount = 100; // Reduced from 150
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
@@ -145,6 +151,18 @@ export function GameBlurBackground() {
       containerRef.current?.removeChild(renderer.domElement);
     };
   }, []);
+
+  // On mobile, just show a simple gradient background
+  if (isMobile) {
+    return (
+      <div
+        className="fixed inset-0 -z-10"
+        style={{
+          background: "linear-gradient(135deg, rgba(15, 10, 18, 1) 0%, rgba(157, 78, 221, 0.1) 50%, rgba(255, 107, 157, 0.1) 100%)",
+        }}
+      />
+    );
+  }
 
   return (
     <div

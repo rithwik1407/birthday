@@ -20,8 +20,10 @@ function seededRandom(seed: number): number {
   return x - Math.floor(x);
 }
 
-function generateParticles(): Particle[] {
-  return Array.from({ length: 20 }).map((_, i) => ({
+function generateParticles(isMobile: boolean): Particle[] {
+  // Reduce particle count on mobile for better performance
+  const count = isMobile ? 8 : 20;
+  return Array.from({ length: count }).map((_, i) => ({
     id: i,
     x: seededRandom(i * 1.1) * 100,
     y: seededRandom(i * 2.3) * 100,
@@ -36,11 +38,16 @@ function generateParticles(): Particle[] {
 export function ParticleBackground() {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
-    setParticles(generateParticles());
+    
+    // Detect mobile
+    const mobile = window.innerWidth < 768;
+    setIsMobile(mobile);
+    setParticles(generateParticles(mobile));
   }, []);
 
   if (!isClient) {
@@ -49,7 +56,7 @@ export function ParticleBackground() {
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
-      {/* Floating Particles */}
+      {/* Floating Particles - Reduced on mobile */}
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -77,13 +84,14 @@ export function ParticleBackground() {
         />
       ))}
 
-      {/* Gradient Orbs */}
+      {/* Gradient Orbs - Reduced opacity on mobile */}
       <motion.div
-        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20"
+        className="absolute w-96 h-96 rounded-full blur-3xl"
         style={{
           background: "radial-gradient(circle, rgba(255, 107, 157, 0.5) 0%, transparent 70%)",
           left: "-10%",
           top: "-10%",
+          opacity: isMobile ? 0.1 : 0.2,
         }}
         animate={{
           x: [0, 50, 0],
@@ -97,11 +105,12 @@ export function ParticleBackground() {
       />
 
       <motion.div
-        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20"
+        className="absolute w-96 h-96 rounded-full blur-3xl"
         style={{
           background: "radial-gradient(circle, rgba(157, 78, 221, 0.5) 0%, transparent 70%)",
           right: "-10%",
           bottom: "-10%",
+          opacity: isMobile ? 0.1 : 0.2,
         }}
         animate={{
           x: [0, -50, 0],

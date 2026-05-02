@@ -41,10 +41,13 @@ export function VideoWallSection() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch("/api/videos");
+        const response = await fetch("/api/videos", {
+          cache: "no-store",
+        });
         if (response.ok) {
           const data = await response.json();
-          const videoList = data.length > 0 ? data : sampleVideos;
+          console.log("Fetched videos:", data);
+          const videoList = Array.isArray(data) && data.length > 0 ? data : sampleVideos;
           setVideos(videoList);
           
           // Restore watched videos from guessedBy field
@@ -58,9 +61,13 @@ export function VideoWallSection() {
           });
           setWatchedVideos(watched);
           setGuesses(guessesMap);
+        } else {
+          console.error("API response not ok:", response.status);
+          setVideos(sampleVideos);
         }
       } catch (error) {
         console.error("Error fetching videos:", error);
+        setVideos(sampleVideos);
       }
     };
 
@@ -374,7 +381,7 @@ export function VideoWallSection() {
                     type="text"
                     value={guessInput}
                     onChange={(e) => setGuessInput(e.target.value)}
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === "Enter" && showGuessInput && !isSubmitting) {
                         handleGuessSubmit(showGuessInput);
                       }
@@ -459,6 +466,8 @@ export function VideoWallSection() {
                   autoPlay
                   controlsList="nodownload"
                   crossOrigin="anonymous"
+                  preload="metadata"
+                  playsInline
                   className="w-full h-full"
                 />
               )
