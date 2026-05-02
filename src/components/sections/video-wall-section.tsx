@@ -47,7 +47,9 @@ export function VideoWallSection() {
         if (response.ok) {
           const data = await response.json();
           console.log("Fetched videos:", data);
-          const videoList = Array.isArray(data) && data.length > 0 ? data : sampleVideos;
+          // Use whatever the API returns (empty array or videos)
+          // Don't fall back to sample data if array is empty
+          const videoList = Array.isArray(data) ? data : sampleVideos;
           setVideos(videoList);
           
           // Restore watched videos from guessedBy field

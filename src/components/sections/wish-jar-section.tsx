@@ -38,13 +38,27 @@ export function WishJarSection() {
   useEffect(() => {
     const fetchWishes = async () => {
       try {
-        const response = await fetch("/api/wishes");
+        const response = await fetch("/api/wishes", {
+          cache: "no-store",
+        });
         if (response.ok) {
           const data = await response.json();
-          setWishes(data.length > 0 ? data : sampleWishes);
+          console.log("Fetched wishes:", data);
+          // Use whatever the API returns (empty array or wishes)
+          // Don't fall back to sample data if array is empty
+          if (Array.isArray(data)) {
+            setWishes(data);
+          } else {
+            console.log("Invalid data format, using sample data");
+            setWishes(sampleWishes);
+          }
+        } else {
+          console.error("API response not ok:", response.status);
+          setWishes(sampleWishes);
         }
       } catch (error) {
         console.error("Error fetching wishes:", error);
+        setWishes(sampleWishes);
       }
     };
 
@@ -144,7 +158,7 @@ export function WishJarSection() {
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#ff6b9d", "#c77dff", "#ffd60a"],
+        colors: ["#d852b9ff", "#c77dff", "#ffd60a"],
       });
       // Redirect to reveal page after delay
       setTimeout(() => {
